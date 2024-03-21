@@ -98,7 +98,7 @@ export default function data() {
             color="text"
             fontWeight="medium"
           >
-            <MDButton color="success" size="medium">
+            <MDButton color="success" size="small">
               <Icon fontSize="large">{"hail"}</Icon>
             </MDButton>
           </MDTypography>
@@ -111,7 +111,7 @@ export default function data() {
             color="text"
             fontWeight="medium"
           >
-            <MDButton color="error" size="medium">
+            <MDButton color="error" size="small">
               <Icon fontSize="large">{"delete"}</Icon>
             </MDButton>
           </MDTypography>
