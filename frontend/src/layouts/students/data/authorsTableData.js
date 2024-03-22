@@ -3,14 +3,52 @@ import MDBox from "components/MDBox";
 import MDButton from "components/MDButton";
 import MDTypography from "components/MDTypography";
 import MDAvatar from "components/MDAvatar";
-import MDBadge from "components/MDBadge";
 import { Icon } from "@mui/material";
 // Images
 import team2 from "assets/images/team-2.jpg";
-import team3 from "assets/images/team-3.jpg";
-import team4 from "assets/images/team-4.jpg";
+import { useState, useEffect } from "react";
+import DataTable from "examples/Tables/DataTable";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+export default function Data() {
+  const [studentData, setStudentData] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`http://localhost:5001/studentData`);
+        const result = await response.json();
+        setStudentData(result);
+      } catch (error) {
+        console.error("Error fetching test data:", error);
+      }
+    };
+    fetchData();
+  }, []);
 
-export default function data() {
+  const handleDelete = async (uid) => {
+    try {
+      const response = await fetch(
+        `http://localhost:5001/studentDelete/${uid}`
+      );
+      const result = await response.json();
+      setStudentData(result);
+      toast.error("Deleted successfully!", { theme: "colored" });
+    } catch (error) {
+      console.error("Error fetching test data:", error);
+    }
+  };
+  const handlePromote = async (uid, name) => {
+    try {
+      const response = await fetch(
+        `http://localhost:5001/studentPromote/${uid}`
+      );
+      const result = await response.json();
+      setStudentData(result);
+    toast.success(`${name} became Alumni...`, { theme: "colored" });
+    } catch (error) {
+      console.error("Error fetching test data:", error);
+    }
+  };
   const Name = ({ image, name, regno }) => (
     <MDBox display="flex" alignItems="center" lineHeight={1}>
       <MDAvatar src={image} name={name} size="sm" />
@@ -50,7 +88,7 @@ export default function data() {
     </MDBox>
   );
 
-  return {
+  let student = {
     columns: [
       { Header: "S.no", accessor: "uid", align: "center" },
       { Header: "Name", accessor: "name", width: "20%", align: "center" },
@@ -61,62 +99,81 @@ export default function data() {
       { Header: "Action", accessor: "action", align: "center" },
     ],
 
-    rows: [
-      {
-        uid: (
-          <MDTypography
-            component="a"
-            href="#"
-            variant="caption"
-            color="text"
-            fontWeight="medium"
+    rows: studentData.map((data) => ({
+      uid: (
+        <MDTypography
+          component="a"
+          href="#"
+          variant="caption"
+          color="text"
+          fontWeight="medium"
+        >
+          {data.uid}
+        </MDTypography>
+      ),
+      name: <Name image={team2} name={data.name} regno={data.regno} />,
+      aoi: <Aoi title={data.domain} description={data.aoi} />,
+      contact: <Contact phone={data.phone} email={data.email} />,
+      ai: (
+        <MDTypography
+          component="a"
+          href="#"
+          variant="caption"
+          color="text"
+          fontWeight="medium"
+        >
+          {data.alumni_interaction}
+        </MDTypography>
+      ),
+      update: (
+        <MDTypography
+          component="a"
+          href="#"
+          variant="caption"
+          color="text"
+          fontWeight="medium"
+        >
+          <MDButton
+            onClick={() => {
+              handlePromote(data.uid, data.name);
+            }}
+            color="success"
+            size="small"
           >
-            {1}
-          </MDTypography>
-        ),
-        name: <Name image={team2} name="JAYAPRASATH K" regno="927621BCS043" />,
-        aoi: <Aoi title="DEVELOPER" description="Web Developer" />,
-        contact: (
-          <Contact phone="9876543210" email="jayaprasathjp44@gmail.com" />
-        ),
-        ai: (
-          <MDTypography
-            component="a"
-            href="#"
-            variant="caption"
-            color="text"
-            fontWeight="medium"
+            <Icon fontSize="large">{"hail"}</Icon>
+          </MDButton>
+        </MDTypography>
+      ),
+      action: (
+        <MDTypography
+          component="a"
+          variant="caption"
+          color="text"
+          fontWeight="medium"
+        >
+          <MDButton
+            onClick={() => {
+              handleDelete(data.uid);
+            }}
+            color="error"
+            size="small"
           >
-            {11}
-          </MDTypography>
-        ),
-        update: (
-          <MDTypography
-            component="a"
-            href="#"
-            variant="caption"
-            color="text"
-            fontWeight="medium"
-          >
-            <MDButton color="success" size="small">
-              <Icon fontSize="large">{"hail"}</Icon>
-            </MDButton>
-          </MDTypography>
-        ),
-        action: (
-          <MDTypography
-            component="a"
-            href="#"
-            variant="caption"
-            color="text"
-            fontWeight="medium"
-          >
-            <MDButton color="error" size="small">
-              <Icon fontSize="large">{"delete"}</Icon>
-            </MDButton>
-          </MDTypography>
-        ),
-      },
-    ],
+            <Icon fontSize="large">{"delete"}</Icon>
+          </MDButton>
+        </MDTypography>
+      ),
+    })),
   };
+  const { columns, rows } = student;
+  return (
+    <>
+      <DataTable
+        table={{ columns, rows }}
+        isSorted={true}
+        entriesPerPage={true}
+        showTotalEntries={true}
+      />
+      <ToastContainer style={{ fontSize: "15px", width: "300px" }} />
+    </>
+  );
 }

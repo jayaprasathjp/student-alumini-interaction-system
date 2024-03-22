@@ -9,14 +9,9 @@ import MDTypography from "components/MDTypography";
 // Material Dashboard 2 React example components
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
-import Footer from "examples/Footer";
-import DataTable from "examples/Tables/DataTable";
-
-// Data
-import authorsTableData from "layouts/aluminis/data/authorsTableData";
+import AlumniTableData from "layouts/aluminis/data/authorsTableData";
 
 function Tables() {
-  const { columns, rows } = authorsTableData();
 
   return (
     <DashboardLayout>
@@ -40,13 +35,7 @@ function Tables() {
                 </MDTypography>
               </MDBox>
               <MDBox pt={3}>
-                <DataTable
-                  table={{ columns, rows }}
-                  isSorted={false}
-                  entriesPerPage={false}
-                  showTotalEntries={false}
-                  noEndBorder
-                />
+                <AlumniTableData/>
               </MDBox>
             </Card>
           </Grid>
