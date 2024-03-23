@@ -9,7 +9,10 @@ import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import MDButton from "components/MDButton";
 
-const StaffEditModel = ({ onChangeOpen }) => {
+import CloseIcon from "@mui/icons-material/Close";
+import { IconButton } from "@mui/material";
+
+const StaffEditModal = ({ onChangeOpen }) => {
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -33,7 +36,6 @@ const StaffEditModel = ({ onChangeOpen }) => {
         },
         body: JSON.stringify(formData),
       });
-      const result = await response.json();
     } catch (error) {
       console.log(error);
     }
@@ -43,10 +45,28 @@ const StaffEditModel = ({ onChangeOpen }) => {
     <div>
       <Dialog
         open={true}
+        fullWidth={true}
+        maxWidth="xs"
         onClose={() => onChangeOpen(false)}
         sx={{ "& .MuiDialog-paper": { height: "600px" } }}
       >
-        <DialogTitle>Edit Profile</DialogTitle>
+        <DialogTitle color="info">
+          Edit Profile
+          <IconButton
+            aria-label="close"
+            onClick={() => {
+              onChangeOpen(false);
+            }}
+            sx={{
+              position: "absolute",
+              right: 8,
+              top: 8,
+              color: "inherit",
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
 
         <form onSubmit={handleUpdate}>
           <DialogContent>
@@ -55,48 +75,48 @@ const StaffEditModel = ({ onChangeOpen }) => {
                 sx={{
                   "& .MuiTextField-root": {
                     m: 1,
-                    width: "55ch",
+                    width: "44ch",
                   },
                 }}
               >
-                  <TextField
-                    onChange={handleChange}
-                    name="name"
-                    id="outlined-required"
-                    label="Name"
-                    variant="outlined"
-                  />
-                  <TextField
-                    onChange={handleChange}
-                    name="description"
-                    label="Description"
-                    multiline
-                  />
+                <TextField
+                  onChange={handleChange}
+                  name="name"
+                  id="outlined-required"
+                  label="Name"
+                  variant="outlined"
+                />
+                <TextField
+                  onChange={handleChange}
+                  name="description"
+                  label="Description"
+                  multiline
+                />
 
-                  <TextField
-                    onChange={handleChange}
-                    id="outlined-required"
-                    name="domain"
-                    label="Domain name"
-                  />
-                  <TextField
-                    onChange={handleChange}
-                    id="outlined-required"
-                    name="phone"
-                    label="Contact Number"
-                  />
-                  <TextField
-                    id="outlined-required"
-                    onChange={handleChange}
-                    label="Email"
-                    name="email"
-                  />
-                  <TextField
-                    id="outlined-required"
-                    onChange={handleChange}
-                    label="Experience"
-                    name="experience"
-                  />
+                <TextField
+                  onChange={handleChange}
+                  id="outlined-required"
+                  name="domain"
+                  label="Domain name"
+                />
+                <TextField
+                  onChange={handleChange}
+                  id="outlined-required"
+                  name="phone"
+                  label="Contact Number"
+                />
+                <TextField
+                  id="outlined-required"
+                  onChange={handleChange}
+                  label="Email"
+                  name="email"
+                />
+                <TextField
+                  id="outlined-required"
+                  onChange={handleChange}
+                  label="Experience"
+                  name="experience"
+                />
               </Box>
             </DialogContentText>
           </DialogContent>
@@ -118,4 +138,4 @@ const StaffEditModel = ({ onChangeOpen }) => {
   );
 };
 
-export default StaffEditModel;
+export default StaffEditModal;

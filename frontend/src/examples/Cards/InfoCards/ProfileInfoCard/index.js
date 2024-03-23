@@ -11,7 +11,7 @@ import Icon from "@mui/material/Icon";
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
-import StaffEditModel from "layouts/profile/StaffEditModel";
+import StaffEditModal from "layouts/profile/StaffEditModal";
 import {IconButton} from "@mui/material";
 function ProfileInfoCard({
   renderProfile,
@@ -66,7 +66,7 @@ function ProfileInfoCard({
   ));
   return (
     <>
-      {open && <StaffEditModel onChangeOpen={handleOpen} />}
+      {open && <StaffEditModal onChangeOpen={handleOpen} />}
 
       <Card sx={{ height: "100%", boxShadow: !shadow && "none" }}>
         <MDBox

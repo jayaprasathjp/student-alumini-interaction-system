@@ -79,42 +79,40 @@ app.get("/studentDelete/:id", (req, res) => {
 app.get("/studentPromote/:id", (req, res) => {
   const id = req.params.id;
 
-  
-    // Step 2: Fetch details of the deleted student
-    const selectQuery = `SELECT * FROM student_details WHERE uid=${id}`;
-    db.query(selectQuery, (err, studentResults) => {
-      if (err) {
-        console.log(err);
-        return res.status(500).json({ error: "Internal server error" });
-      }
-
-      // Step 3: Insert student details into alumni_details
-      const student = studentResults[0]; // Assuming you expect only one result
-      const insertQuery = `INSERT INTO alumni_details (name, regno, department, phone, email, domain, city, pass_year) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
-      const values = [
-        student.name,
-        student.regno,
-        student.department,
-        student.phone,
-        student.email,
-        student.domain,
-        student.city,
-        student.pass_year
-      ];
-      db.query(insertQuery, values, (err, insertResult) => {
-        if (err) {
-          console.log(err);
-          return res.status(500).json({ error: "Internal server error" });
-        }
-        
-  // Step 1: Delete student from student_details
-        const deleteQuery = `DELETE FROM student_details WHERE uid=${id}`;
-  db.query(deleteQuery, (err, deleteResult) => {
+  // Step 2: Fetch details of the deleted student
+  const selectQuery = `SELECT * FROM student_details WHERE uid=${id}`;
+  db.query(selectQuery, (err, studentResults) => {
     if (err) {
       console.log(err);
       return res.status(500).json({ error: "Internal server error" });
     }
 
+    // Step 3: Insert student details into alumni_details
+    const student = studentResults[0]; // Assuming you expect only one result
+    const insertQuery = `INSERT INTO alumni_details (name, regno, department, phone, email, domain, city, pass_year) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+    const values = [
+      student.name,
+      student.regno,
+      student.department,
+      student.phone,
+      student.email,
+      student.domain,
+      student.city,
+      student.pass_year,
+    ];
+    db.query(insertQuery, values, (err, insertResult) => {
+      if (err) {
+        console.log(err);
+        return res.status(500).json({ error: "Internal server error" });
+      }
+
+      // Step 1: Delete student from student_details
+      const deleteQuery = `DELETE FROM student_details WHERE uid=${id}`;
+      db.query(deleteQuery, (err, deleteResult) => {
+        if (err) {
+          console.log(err);
+          return res.status(500).json({ error: "Internal server error" });
+        }
 
         // Step 4: Fetch updated list of students and return as JSON
         const selectAllQuery = `SELECT * FROM student_details`;
@@ -168,9 +166,54 @@ app.get("/programData", (req, res) => {
       console.log(err);
       return res.status(500).json({ error: "Internal server error" });
     }
-    console.log(results);
     return res.json(results);
   });
+});
+app.post("/addprogram", (req, res) => {
+  const { title, alumni_name, venue, date, time, email, department } = req.body;
+
+  const sqlQuery = `INSERT into alumni_interaction_program (title, alumni_name, venue, date, time, email,department) values(?,?,?,?,?,?,?)`; // Assuming you have an 'id' field in your staff_details table
+  db.query(
+    sqlQuery,
+    [title, alumni_name, venue, date, time, email, department],
+    (err, results) => {
+      if (err) {
+        console.log(err);
+        return res.status(500).json({ error: "Internal server error" });
+      }
+      return res.json(results);
+    }
+  );
+});
+
+//Delete program
+app.get("/deleteprogram/:id", (req, res) => {
+  const id = req.params.id;
+  const sqlQuery = `DELETE from alumni_interaction_program where uid=${id}`;
+  db.query(sqlQuery, (err, results) => {
+    if (err) {
+      console.log(err);
+      return res.status(500).json({ error: "Internal server error" });
+    }
+    return res.json(results);
+  });
+});
+//Edit program
+app.post("/editprogram/:id", (req, res) => {
+  const { title, alumni_name, venue, date, time, email } = req.body;
+  const id = req.params.id;
+  const sqlQuery = `UPDATE alumni_interaction_program SET title=?, alumni_name=?, venue=?, date=?, time=?, email=? WHERE uid=?`; // Assuming you have an 'id' field in your staff_details table
+  db.query(
+    sqlQuery,
+    [title, alumni_name, venue, date, time, email, id],
+    (err, results) => {
+      if (err) {
+        console.log(err);
+        return res.status(500).json({ error: "Internal server error" });
+      }
+      return res.json(results);
+    }
+  );
 });
 app.listen(5001, () => {
   console.log("Server is running on http://localhost:5001");
