@@ -215,6 +215,42 @@ app.post("/editprogram/:id", (req, res) => {
     }
   );
 });
+// student staff interaction data
+app.get("/student-staff-interaction-data", (req, res) => {
+  const sqlQuery = `SELECT * FROM student_staff_interaction`;
+  db.query(sqlQuery, (err, results) => {
+    if (err) {
+      console.log(err);
+      return res.status(500).json({ error: "Internal server error" });
+    }
+    return res.json(results);
+  });
+});
+//update student staff interaction status
+app.post("/student-staff-interaction-update/:id", (req, res) => {
+  const id = req.params.id;
+  const { status, date, time } = req.body;
+
+  let sqlQuery;
+  let queryParams;
+
+  if (status === "reject") {
+    sqlQuery = `UPDATE student_staff_interaction SET status=? WHERE uid=?`;
+    queryParams = [status, id];
+  } else {
+    sqlQuery = `UPDATE student_staff_interaction SET date=?, time=?, status=? WHERE uid=?`;
+    queryParams = [date, time, status, id];
+  }
+
+  db.query(sqlQuery, queryParams, (err, results) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: "Internal server error" });
+    }
+    return res.json(results);
+  });
+});
+
 app.listen(5001, () => {
   console.log("Server is running on http://localhost:5001");
 });

@@ -9,10 +9,9 @@ import MDTypography from "components/MDTypography";
 // Material Dashboard 2 React example components
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
+import StudentInteractionTable from "layouts/student_interaction/data/studentInteractionTable";
 
-// Data
-import StudentTableData from "layouts/students/data/studentTableData";
-function Students() {
+function StudentInteraction() {
   return (
     <DashboardLayout>
       <DashboardNavbar />
@@ -31,11 +30,11 @@ function Students() {
                 coloredShadow="info"
               >
                 <MDTypography variant="h6" color="white">
-                  Students
+                  Student Requests
                 </MDTypography>
               </MDBox>
-              <MDBox pt={2}>
-                <StudentTableData />
+              <MDBox pt={3}>
+                <StudentInteractionTable />
               </MDBox>
             </Card>
           </Grid>
@@ -45,4 +44,4 @@ function Students() {
   );
 }
 
-export default Students;
+export default StudentInteraction;

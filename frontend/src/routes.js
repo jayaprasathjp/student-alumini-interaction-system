@@ -1,5 +1,6 @@
 import Dashboard from "layouts/dashboard";
 import Students from "layouts/students";
+import StudentInteraction from "layouts/student_interaction";
 import Aluminis from "layouts/aluminis";
 import Program from "layouts/program";
 import Profile from "layouts/profile";
@@ -20,9 +21,17 @@ const routes = [
   },
   {
     type: "collapse",
+    name: "Student Interaction",
+    key: "students-interaction",
+    icon: <Icon fontSize="small">add_reaction_icon</Icon>,
+    route: "/students-interaction",
+    component: <StudentInteraction />,
+  },
+  {
+    type: "collapse",
     name: "Student",
     key: "students",
-    icon: <Icon fontSize="small">table_view</Icon>,
+    icon: <Icon fontSize="small">group_icon</Icon>,
     route: "/students",
     component: <Students />,
   },
@@ -37,7 +46,7 @@ const routes = [
   {
     type: "collapse",
     name: "Program",
-    key: "Program",
+    key: "program",
     icon: <Icon fontSize="small">receipt_long</Icon>,
     route: "/program",
     component: <Program />,
