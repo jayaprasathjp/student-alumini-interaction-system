@@ -86,7 +86,7 @@ export default function Data() {
       { Header: "Action", accessor: "action", align: "center" },
     ],
 
-    rows: alumniData.map((data) => ({
+    rows: alumniData.slice().reverse().map((data,index) => ({
       uid: (
         <MDTypography
           component="a"
@@ -95,7 +95,7 @@ export default function Data() {
           color="text"
           fontWeight="medium"
         >
-          {data.uid}
+          {index+1}
         </MDTypography>
       ),
       name: <Name image={team2} name={data.name} regno={data.regno} />,

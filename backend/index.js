@@ -230,7 +230,6 @@ app.get("/student-staff-interaction-data", (req, res) => {
 app.post("/student-staff-interaction-update/:id", (req, res) => {
   const id = req.params.id;
   const { status, date, time } = req.body;
-
   let sqlQuery;
   let queryParams;
 

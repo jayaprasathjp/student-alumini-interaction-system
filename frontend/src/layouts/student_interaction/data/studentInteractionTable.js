@@ -9,12 +9,14 @@ import { useEffect, useState } from "react";
 // Images
 import team2 from "assets/images/team-2.jpg";
 import DataTable from "examples/Tables/DataTable";
-
+import ScheduleModal from "./ScheduleModal";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { LogarithmicScale } from "chart.js";
 export default function Data() {
   const [studentStaffInteractionData, setStudentStaffInteractionData] =
     useState([]);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -30,21 +32,20 @@ export default function Data() {
     fetchData();
   }, []);
   const handleUpdate = async (uid, status, date, time) => {
-    // console.log(studentStaffInteractionData);
-
     let Index;
-    const updatedArray = studentStaffInteractionData.map((item) => {
+    const updatedArray = studentStaffInteractionData.map((item, index) => {
       if (uid === item.uid) {
-        // Index=index
+        Index = index;
         return {
           ...item,
           ["status"]: status,
+          ["date"]: date,
+          ["time"]: time,
         };
       }
       return item;
     });
-    console.log(updatedArray);
-
+    // console.log(uid, Index);
     try {
       const response = await fetch(
         `http://localhost:5001/student-staff-interaction-update/${uid}`,
@@ -53,7 +54,7 @@ export default function Data() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(updatedArray[0]),
+          body: JSON.stringify(updatedArray[Index]),
         }
       );
     } catch (error) {
@@ -119,35 +120,53 @@ export default function Data() {
         );
     }
   };
-  const Action = ({ status, uid, date, time }) => {
+  const Action = ({ status, uid, regarding }) => {
+    const [ScheduleOpen, setScheduleOpen] = useState(false);
+    function handleModal() {
+      setScheduleOpen(false);
+    }
+    function handleState(id, date, time) {
+      handleUpdate(id, "accept", date, time);
+      setScheduleOpen(false);
+    }
     switch (status) {
       case "pending":
         return (
-          <MDTypography
-            component="a"
-            variant="caption"
-            color="text"
-            fontWeight="medium"
-          >
-            <MDButton
-              color="success"
-              onClick={() => {
-                handleUpdate(uid, "accept");
-              }}
-              size="small"
+          <>
+            <MDTypography
+              component="a"
+              variant="caption"
+              color="text"
+              fontWeight="medium"
             >
-              <Icon fontSize="large">event_available_icon</Icon>
-            </MDButton>
-            <MDButton
-              onClick={() => {
-                handleUpdate(uid, "reject", date, time);
-              }}
-              color="error"
-              size="small"
-            >
-              <Icon fontSize="large">cancel_icon</Icon>
-            </MDButton>
-          </MDTypography>
+              <MDButton
+                color="success"
+                onClick={() => {
+                  setScheduleOpen(true);
+                }}
+                size="small"
+              >
+                <Icon fontSize="large">event_available_icon</Icon>
+              </MDButton>
+              <MDButton
+                onClick={() => {
+                  handleUpdate(uid, "reject");
+                }}
+                color="error"
+                size="small"
+              >
+                <Icon fontSize="large">cancel_icon</Icon>
+              </MDButton>
+            </MDTypography>
+            {ScheduleOpen && (
+              <ScheduleModal
+                uid={uid}
+                handleState={handleState}
+                regarding={regarding}
+                handleScheduleModal={handleModal}
+              />
+            )}
+          </>
         );
       case "accept":
         return (
@@ -175,7 +194,7 @@ export default function Data() {
       { Header: "Action", accessor: "action", align: "center" },
     ],
 
-    rows: studentStaffInteractionData.map((data) => ({
+    rows: studentStaffInteractionData.slice().reverse().map((data, index) => ({
       uid: (
         <MDTypography
           component="a"
@@ -184,7 +203,7 @@ export default function Data() {
           color="text"
           fontWeight="medium"
         >
-          {data.uid}
+          {index + 1}
         </MDTypography>
       ),
       name: <Name image={team2} name={data.name} regno={data.regno} />,
@@ -218,8 +237,7 @@ export default function Data() {
         <Action
           status={data.status}
           uid={data.uid}
-          date={data.date}
-          time={data.time}
+          regarding={data.regarding}
         />
       ),
     })),

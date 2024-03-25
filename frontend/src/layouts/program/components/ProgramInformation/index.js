@@ -47,7 +47,7 @@ function ProgramInformation() {
   };
   return (
     <>
-    <ToastContainer style={{ fontSize: "15px", width: "300px" }} />
+      <ToastContainer style={{ fontSize: "15px", width: "300px" }} />
       <Card id="delete-account">
         <MDBox pt={3} px={2} display="flex" justifyContent="space-between">
           <MDTypography variant="h6" fontWeight="medium">
@@ -71,20 +71,23 @@ function ProgramInformation() {
             p={0}
             m={0}
           >
-            {programData.map((data, index) => (
-              <ProgramList
-                key={index}
-                title={data.title}
-                alumni_name={data.alumni_name}
-                venue={data.venue}
-                date={data.date}
-                time={data.time}
-                uid={data.uid}
-                email={data.email}
-                handleDeleteProgram={handleDeleteProgram}
-                handleState={onChangeState}
-              />
-            ))}
+            {programData
+              .slice()
+              .reverse()
+              .map((data, index) => (
+                <ProgramList
+                  key={index}
+                  title={data.title}
+                  alumni_name={data.alumni_name}
+                  venue={data.venue}
+                  date={data.date}
+                  time={data.time}
+                  uid={data.uid}
+                  email={data.email}
+                  handleDeleteProgram={handleDeleteProgram}
+                  handleState={onChangeState}
+                />
+              ))}
           </MDBox>
         </MDBox>
       </Card>
@@ -94,7 +97,6 @@ function ProgramInformation() {
           handleState={onChangeState}
         />
       )}
-      
     </>
   );
 }

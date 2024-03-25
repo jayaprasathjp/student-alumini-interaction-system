@@ -32,7 +32,6 @@ function Cover() {
           mx={2}
           mt={-3}
           p={3}
-          mb={1}
           textAlign="center"
         >
           <MDTypography variant="h4" fontWeight="medium" color="white" mt={1}>
@@ -40,42 +39,58 @@ function Cover() {
           </MDTypography>
         </MDBox>
         <MDBox pt={4} pb={4} px={4}>
-          
           <MDBox component="form" role="form">
-          <Grid item xs={12} md={6} lg={14} sx={{ ml: "auto" }}>
             <AppBar position="static">
               <Tabs
+                textColor="info"
                 orientation={"horizontal"}
                 value={tabValue}
                 onChange={handleSetTabValue}
               >
                 <Tab
-                  label="Student"
+                  label="STUDENT"
                   icon={
-                    <Icon fontSize="small" sx={{ mt: -0.25 }}>
-                      home
+                    <Icon
+                      fontSize="small"
+                      style={{ fontSize: "100px" }}
+                      sx={{ mt: -0.25 }}
+                    >
+                      school_icon
                     </Icon>
                   }
+                  sx={{
+                    fontSize: "10px",
+                    fontWeight: "bold",
+                  }}
                 />
                 <Tab
-                  label="Alumini"
+                  label="ALUMNI"
                   icon={
                     <Icon fontSize="small" sx={{ mt: -0.25 }}>
-                      email
+                      engineering_icon
                     </Icon>
                   }
+                  sx={{
+                    fontSize: "10px",
+                    fontWeight: "bold",
+                  }}
                 />
                 <Tab
-                  label="Staff"
+                  label="STAFF"
                   icon={
                     <Icon fontSize="small" sx={{ mt: -0.25 }}>
-                      settings
+                      psychology_outlined_icon
                     </Icon>
                   }
+                  sx={{
+                    fontSize: "10px",
+                    fontWeight: "bold",
+                    padding: "5px",
+                  }}
                 />
               </Tabs>
             </AppBar>
-          </Grid>
+
             <MDBox mt={2} mb={2}>
               <MDInput
                 type="email"
