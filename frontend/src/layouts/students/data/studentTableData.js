@@ -91,7 +91,7 @@ export default function Data() {
   let student = {
     columns: [
       { Header: "S.no", accessor: "uid", align: "center" },
-      { Header: "Name", accessor: "name", width: "20%", align: "center" },
+      { Header: "Name", accessor: "name", width: "20%", align: "left" },
       { Header: "Aear of Interest", accessor: "aoi", align: "left" },
       { Header: "Contact", accessor: "contact", align: "left" },
       { Header: "Alumini Interacted", accessor: "ai", align: "center" },

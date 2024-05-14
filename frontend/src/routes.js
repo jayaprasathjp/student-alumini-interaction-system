@@ -1,7 +1,7 @@
 import Dashboard from "layouts/dashboard";
 import Students from "layouts/students";
 import StudentInteraction from "layouts/student_interaction";
-import Aluminis from "layouts/aluminis";
+import Alumnis from "layouts/aluminis";
 import Program from "layouts/program";
 import Profile from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
@@ -9,7 +9,7 @@ import SignUp from "layouts/authentication/sign-up";
 
 // @mui icons
 import Icon from "@mui/material/Icon";
-
+const id="alumni";
 const routes = [
   {
     type: "collapse",
@@ -37,11 +37,11 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "Alumini",
-    key: "aluminis",
+    name: "Alumni",
+    key: "alumnis",
     icon: <Icon fontSize="small">hail</Icon>,
-    route: "/aluminis",
-    component: <Aluminis />,
+    route: "/alumnis",
+    component: <Alumnis />,
   },
   {
     type: "collapse",
