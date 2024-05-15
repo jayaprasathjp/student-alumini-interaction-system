@@ -326,6 +326,65 @@ async function main() {
       }
     ]
   });
+  await prisma.student_alumni_interaction.createMany({
+    data: [
+      {
+        name: 'Alice Brown',
+        regno: 'S12345',
+        domain: 'AI',
+        department: 'Computer Science',
+        pass_year: '2024',
+        regarding: 'Research Opportunities',
+        date: '2024-05-10',
+        time: '10:00 AM',
+        status: 'approved'
+      },
+      {
+        name: 'Bob Smith',
+        regno: 'S67890',
+        domain: 'Thermodynamics',
+        department: 'Mechanical Engineering',
+        pass_year: '2024',
+        regarding: 'Internship Possibilities',
+        date: '2024-06-15',
+        time: '2:00 PM',
+        status: 'pending'
+      },
+      {
+        name: 'Charlie Johnson',
+        regno: 'S11223',
+        domain: 'Microelectronics',
+        department: 'Electrical Engineering',
+        pass_year: '2024',
+        regarding: 'Project Guidance',
+        date: '2024-07-20',
+        time: '11:00 AM',
+        status: 'approved'
+      },
+      {
+        name: 'David Lee',
+        regno: 'S44556',
+        domain: 'Structural',
+        department: 'Civil Engineering',
+        pass_year: '2024',
+        regarding: 'Thesis Review',
+        date: '2024-08-25',
+        time: '3:00 PM',
+        status: 'pending'
+      },
+      {
+        name: 'Eva Green',
+        regno: 'S77889',
+        domain: 'Cybersecurity',
+        department: 'Information Technology',
+        pass_year: '2024',
+        regarding: 'Coursework Doubts',
+        date: '2024-09-30',
+        time: '4:00 PM',
+        status: 'approved'
+      }
+    ]
+  });
 }
 
 main()

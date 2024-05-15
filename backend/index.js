@@ -22,12 +22,12 @@ db.connect((err) => {
 });
 //staff details update
 app.post("/staffUpdate/:id", (req, res) => {
-  const { name, description, domain, phone, email, experience } = req.body;
+  const { name, description, domain, phone, email,image, experience } = req.body;
   const id = req.params.id;
-  const sqlQuery = `UPDATE staff_details SET name=?, description=?, domain=?, phone=?, email=?, experience=? WHERE id=?`; // Assuming you have an 'id' field in your staff_details table
+  const sqlQuery = `UPDATE staff_details SET name=?, description=?, domain=?, phone=?, email=?,image=?, experience=? WHERE uid=?`; // Assuming you have an 'id' field in your staff_details table
   db.query(
     sqlQuery,
-    [name, description, domain, phone, email, experience, id],
+    [name, description, domain, phone, email, experience,image, id],
     (err, results) => {
       if (err) {
         console.log(err);
@@ -40,7 +40,7 @@ app.post("/staffUpdate/:id", (req, res) => {
 //particular staff
 app.get("/staffData/:id", (req, res) => {
   const id = req.params.id;
-  const sqlQuery = `SELECT * FROM staff_details where id=${id}    `;
+    const sqlQuery = `SELECT * FROM staff_details where uid=${id}    `;
   db.query(sqlQuery, (err, results) => {
     if (err) {
       console.log(err);
@@ -170,6 +170,20 @@ app.get("/programData", (req, res) => {
     return res.json(results);
   });
 });
+//individual program list
+app.get("/programData/:name", (req, res) => {
+
+  const name=req.params.name;
+  console.log(name);
+  const sqlQuery = `SELECT * FROM alumni_interaction_program WHERE alumni_name=?`;
+  db.query(sqlQuery,[name], (err, results) => {
+    if (err) {
+      console.log(err);
+      return res.status(500).json({ error: "Internal server error" });
+    }
+    return res.json(results);
+  });
+});
 app.post("/addprogram", (req, res) => {
   const { title, alumni_name, venue, date, time, email, department } = req.body;
 
@@ -250,7 +264,170 @@ app.post("/student-staff-interaction-update/:id", (req, res) => {
     return res.json(results);
   });
 });
+// student alumni interaction data
+app.get("/student-alumni-interaction-data", (req, res) => {
+  const sqlQuery = `SELECT * FROM student_alumni_interaction`;
+  db.query(sqlQuery, (err, results) => {
+    if (err) {
+      console.log(err);
+      return res.status(500).json({ error: "Internal server error" });
+    }
+    return res.json(results);
+  });
+});
+//update student alumni interaction status
+app.post("/student-alumni-interaction-update/:id", (req, res) => {
+  const id = req.params.id;
+  const { status, date, time,link } = req.body;
+  let sqlQuery;
+  let queryParams;
 
+  if (status === "reject") {
+    sqlQuery = `UPDATE student_alumni_interaction SET status=? WHERE uid=?`;
+    queryParams = [status, id];
+  } else {
+    sqlQuery = `UPDATE student_alumni_interaction SET date=?, time=?, status=?,link=? WHERE uid=?`;
+    queryParams = [date, time, status,link, id];
+  }
+
+  db.query(sqlQuery, queryParams, (err, results) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: "Internal server error" });
+    }
+    return res.json(results);
+  });
+});
+//update student alumni link status
+app.get("/student-alumni-interaction-updateLink/:id", (req, res) => {
+  const id = req.params.id;
+  const status="end";
+  let sqlQuery;
+  let queryParams;
+    sqlQuery = `UPDATE student_alumni_interaction SET status=? WHERE uid=?`;
+    queryParams = [status, id];
+  db.query(sqlQuery, queryParams, (err, results) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: "Internal server error" });
+    }
+  });
+  const sqlQuery1 = `SELECT * FROM student_alumni_interaction`;
+  db.query(sqlQuery1, (err, results) => {
+    if (err) {
+      console.log(err);
+      return res.status(500).json({ error: "Internal server error" });
+    }
+    return res.json(results);
+  });
+});
+// dashboard data
+app.get("/dashboard-data", (req, res) => {
+  const sqlQuery = `SELECT * FROM student_alumni_interaction`;
+  db.query(sqlQuery, (err, results) => {
+    if (err) {
+      console.log(err);
+      return res.status(500).json({ error: "Internal server error" });
+    }
+    return res.json(results);
+  });
+});
+
+//particular alumni
+app.get("/alumniData/:id", (req, res) => {
+  const id = req.params.id;
+  const sqlQuery = `SELECT * FROM alumni_details where uid=${id}    `;
+  db.query(sqlQuery, (err, results) => {
+    if (err) {
+      console.log(err);
+      return res.status(500).json({ error: "Internal server error" });
+    }
+    return res.json(results);
+  });
+});
+//alumni details update
+app.post("/AlumniUpdate/:id", (req, res) => {
+  const { domain, phone, email, image, company, city } = req.body;
+  const id = req.params.id;
+  const sqlQuery = `UPDATE alumni_details SET domain=?, phone=?,email=?,image=?,company=?,city=? WHERE uid=?`; // Assuming you have an 'id' field in your staff_details table
+  db.query(
+    sqlQuery,
+    [domain, phone, email, image, company, city, id],
+    (err, results) => {
+      if (err) {
+        console.log(err);
+        return res.status(500).json({ error: "Internal server error" });
+      }
+      return res.json(results);
+    }
+  );
+});
+
+//dashboard_details
+app.get('/dashboard', (req, res) => {
+  let count = {
+    student: 0,
+    alumni: 0,
+    staff: 0,
+    program: 0,
+  };
+
+  // Define SQL queries
+  const sqlQuery1 = 'SELECT COUNT(*) AS count FROM student_details';
+  const sqlQuery2 = 'SELECT COUNT(*) AS count FROM staff_details';
+  const sqlQuery3 = 'SELECT COUNT(*) AS count FROM alumni_details';
+  const sqlQuery4 = 'SELECT COUNT(*) AS count FROM student_alumni_interaction';
+
+  // Create promises for each query
+  const query1 = new Promise((resolve, reject) => {
+    db.query(sqlQuery1, (err, results) => {
+      if (err) {
+        return reject(err);
+      }
+      count.student = results[0].count;
+      resolve();
+    });
+  });
+
+  const query2 = new Promise((resolve, reject) => {
+    db.query(sqlQuery2, (err, results) => {
+      if (err) {
+        return reject(err);
+      }
+      count.staff = results[0].count;
+      resolve();
+    });
+  });
+
+  const query3 = new Promise((resolve, reject) => {
+    db.query(sqlQuery3, (err, results) => {
+      if (err) {
+        return reject(err);
+      }
+      count.alumni = results[0].count;
+      resolve();
+    });
+  });
+  const query4 = new Promise((resolve, reject) => {
+    db.query(sqlQuery4, (err, results) => {
+      if (err) {
+        return reject(err);
+      }
+      count.program = results[0].count;
+      resolve();
+    });
+  });
+
+  // Execute all queries and send the response once all are completed
+  Promise.all([query1, query2, query3,query4])
+    .then(() => {
+      return res.json(count);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ error: 'Internal server error' });
+    });
+});
 app.listen(process.env.PORT, () => {
   console.log(`Server is running on http://localhost:${process.env.PORT}`);
 });

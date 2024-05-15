@@ -10,17 +10,16 @@ import Box from "@mui/material/Box";
 import MDButton from "components/MDButton";
 
 import CloseIcon from "@mui/icons-material/Close";
-import { IconButton,Input } from "@mui/material";
+import { IconButton, Input } from "@mui/material";
 
-const StaffEditModal = ({ onChangeOpen }) => {
+const AlumniEditModal = ({ onChangeOpen }) => {
   const [formData, setFormData] = useState({
-    name: "",
-    description: "",
     domain: "",
     phone: "",
     email: "",
-    image:"",
-    experience: "",
+    image: "",
+    company: "",
+    city: "",
   });
 
   const handleChange = (event) => {
@@ -30,13 +29,14 @@ const StaffEditModal = ({ onChangeOpen }) => {
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`http://localhost:5001/staffUpdate/${2}`, {
+      const response = await fetch(`http://localhost:5001/AlumniUpdate/${2}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
       });
+      console.log(await response.json());
     } catch (error) {
       console.log(error);
     }
@@ -49,7 +49,7 @@ const StaffEditModal = ({ onChangeOpen }) => {
         fullWidth={true}
         maxWidth="xs"
         onClose={() => onChangeOpen(false)}
-        sx={{ "& .MuiDialog-paper": { height: "600px" } }}
+        sx={{ "& .MuiDialog-paper": { height: "530px" } }}
       >
         <DialogTitle color="info">
           Edit Profile
@@ -82,20 +82,6 @@ const StaffEditModal = ({ onChangeOpen }) => {
               >
                 <TextField
                   onChange={handleChange}
-                  name="name"
-                  id="outlined-required"
-                  label="Name"
-                  variant="outlined"
-                />
-                <TextField
-                  onChange={handleChange}
-                  name="description"
-                  label="Description"
-                  multiline
-                />
-
-                <TextField
-                  onChange={handleChange}
                   id="outlined-required"
                   name="domain"
                   label="Domain name"
@@ -112,18 +98,18 @@ const StaffEditModal = ({ onChangeOpen }) => {
                   label="Email"
                   name="email"
                 />
-                 <Input
-                type="file"
-                sx={{
-                  outline:"none",
-                  border: "1px solid rgb(216,216,216)", 
-                  borderRadius: "5px",
-                  width: "96%",
-                  height: "45px",
-                  marginLeft: "6px",
-                  paddingLeft: "5px",
-                  alignItems: "center"
-                }}
+                <Input
+                  type="file"
+                  sx={{
+                    outline: "none",
+                    border: "1px solid rgb(216,216,216)",
+                    borderRadius: "5px",
+                    width: "96%",
+                    height: "45px",
+                    marginLeft: "6px",
+                    paddingLeft: "5px",
+                    alignItems: "center",
+                  }}
                   id="outlined-required"
                   onChange={handleChange}
                   label="image"
@@ -132,8 +118,15 @@ const StaffEditModal = ({ onChangeOpen }) => {
                 <TextField
                   id="outlined-required"
                   onChange={handleChange}
-                  label="Experience"
-                  name="experience"
+                  label="company"
+                  name="company"
+                />
+                <TextField
+                  onChange={handleChange}
+                  name="city"
+                  id="outlined-required"
+                  label="city"
+                  variant="outlined"
                 />
               </Box>
             </DialogContentText>
@@ -156,4 +149,4 @@ const StaffEditModal = ({ onChangeOpen }) => {
   );
 };
 
-export default StaffEditModal;
+export default AlumniEditModal;

@@ -12,6 +12,7 @@ import Icon from "@mui/material/Icon";
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 import StaffEditModal from "layouts/profile/StaffEditModal";
+import AlumniEditModal from "layouts/profile_alumni/AlumniEditModal";
 import {IconButton} from "@mui/material";
 function ProfileInfoCard({
   renderProfile,
@@ -64,9 +65,21 @@ function ProfileInfoCard({
       </MDTypography>
     </MDBox>
   ));
+  const user="alumni";
+  let EditModal;
+  switch(user){
+    case "alumni":{
+      EditModal=<AlumniEditModal onChangeOpen={handleOpen} />;
+    }
+    break;
+    case "staff":{
+      EditModal=<StaffEditModal onChangeOpen={handleOpen} />;
+    }
+    break;
+  }
   return (
     <>
-      {open && <StaffEditModal onChangeOpen={handleOpen} />}
+      {open && EditModal}
 
       <Card sx={{ height: "100%", boxShadow: !shadow && "none" }}>
         <MDBox

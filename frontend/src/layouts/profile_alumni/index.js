@@ -6,19 +6,18 @@ import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 import ProfileInfoCard from "examples/Cards/InfoCards/ProfileInfoCard";
-import Header from "layouts/profile/components/Header";
+import Header from "layouts/profile_alumni/components/Header";
 
 function Overview() {
-  const [staffData, setStaffData] = useState([]);
+  const [AlumniData, setAlumniData] = useState([]);
   let [state, setState] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`http://localhost:5001/staffData/2`);
+        const response = await fetch(`http://localhost:5001/alumniData/2`);
         const result = await response.json();
-        console.log(result);
-        setStaffData(result);
+        setAlumniData(result);
       } catch (error) {
         console.error("Error fetching test data:", error);
       }
@@ -35,22 +34,24 @@ function Overview() {
     <DashboardLayout>
       <DashboardNavbar />
       <MDBox mb={2} />
-      <Header name={staffData[0]?.name} department={staffData[0]?.department}>
+      <Header name={AlumniData[0]?.name} department={AlumniData[0]?.department}>
         <MDBox mt={5} mb={3}>
           <Grid container spacing={1}>
             <Grid item sx={{ display: "flex" }}>
               <Divider orientation="vertical" sx={{ ml: -2, mr: 1 }} />
-              {staffData.length > 0 && (
+              {AlumniData.length > 0 && (
                 <ProfileInfoCard
                   renderProfile={Renderprofile}
                   title="profile information"
-                  description={`${staffData[0].description}`}
                   info={{
-                    fullName: `${staffData[0].name}`,
-                    mobile: `${staffData[0].phone}`,
-                    email: `${staffData[0].email}`,
-                    Domain: `${staffData[0].domain}`,
-                    Experience: `${staffData[0].experience}`,
+                    fullName: `${AlumniData[0].name}`,
+                    mobile: `${AlumniData[0].phone}`,
+                    email: `${AlumniData[0].email}`,
+                    Domain: `${AlumniData[0].domain}`,
+                    image: `${AlumniData[0].image}`,
+                    company: `${AlumniData[0].company}`,
+                    city: `${AlumniData[0].city}`,
+                    pass_year: `${AlumniData[0].pass_year}`,
                   }}
                   action={{
                     tooltip: "Edit Profile",

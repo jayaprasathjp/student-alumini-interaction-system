@@ -1,26 +1,24 @@
 import Grid from "@mui/material/Grid";
-
-// Material Dashboard 2 React components
 import MDBox from "components/MDBox";
-
-// Material Dashboard 2 React example components
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
-import Footer from "examples/Footer";
-import ReportsBarChart from "examples/Charts/BarCharts/ReportsBarChart";
-import ReportsLineChart from "examples/Charts/LineCharts/ReportsLineChart";
 import ComplexStatisticsCard from "examples/Cards/StatisticsCards/ComplexStatisticsCard";
-
-// Data
-import reportsBarChartData from "layouts/dashboard/data/reportsBarChartData";
-import reportsLineChartData from "layouts/dashboard/data/reportsLineChartData";
-
-// Dashboard components
-import Projects from "layouts/dashboard/components/Projects";
-import OrdersOverview from "layouts/dashboard/components/OrdersOverview";
-
+import { useState,useEffect } from "react";
 function Dashboard() {
-  const { sales, tasks } = reportsLineChartData;
+  const [dashboard,setDashboard]=useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`http://localhost:5001/dashboard`);
+        const result = await response.json();
+        setDashboard(result);
+      } catch (error) {
+        console.error("Error fetching test data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <DashboardLayout>
@@ -33,11 +31,10 @@ function Dashboard() {
                 color="dark"
                 icon="weekend"
                 title="Students"
-                count={281}
+                count={dashboard.student}
                 percentage={{
                   color: "success",
-                  amount: "+55%",
-                  label: "of students",
+                  amount: "Executors"
                 }}
               />
             </MDBox>
@@ -47,11 +44,10 @@ function Dashboard() {
               <ComplexStatisticsCard
                 icon="leaderboard"
                 title="Aluminis"
-                count="2,300"
+                count={dashboard.alumni}
                 percentage={{
                   color: "success",
-                  amount: "+3%",
-                  label: "of aluminis",
+                  amount: "Achievers"
                 }}
               />
             </MDBox>
@@ -62,11 +58,10 @@ function Dashboard() {
                 color="success"
                 icon="store"
                 title="Staff"
-                count="34k"
+                count={dashboard.staff}
                 percentage={{
                   color: "success",
-                  amount: "+1%",
-                  label: "of staff",
+                  amount: "Supporter"
                 }}
               />
             </MDBox>
@@ -76,12 +71,11 @@ function Dashboard() {
               <ComplexStatisticsCard
                 color="primary"
                 icon="person_add"
-                title="Requests"
-                count="+91"
+                title="Programs"
+                count={dashboard.program}
                 percentage={{
                   color: "success",
-                  amount: "",
-                  label: "Waiting for you",
+                  amount: "Processors"
                 }}
               />
             </MDBox>
